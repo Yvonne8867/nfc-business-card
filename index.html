@@ -181,8 +181,8 @@
 <body>
   <main>
     <header class="header">
-      <h1>李依凡｜電子名片</h1>
-      <p class="subtitle">請選擇語言版本</p>
+      <h1 id="pageTitle">李依凡｜電子名片</h1>
+      <p id="pageSubtitle" class="subtitle">請選擇語言版本</p>
     </header>
 
     <div class="tabs">
@@ -241,6 +241,31 @@
   <script>
     const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
     const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+
+    const pageCopy = {
+      zh: {
+        title: '李依凡｜電子名片',
+        subtitle: '請選擇語言版本',
+        documentTitle: '李依凡｜電子名片'
+      },
+      en: {
+        title: 'Yvonne LI | Business Card',
+        subtitle: 'Please select a language version',
+        documentTitle: 'Yvonne LI | Business Card'
+      }
+    };
+
+    function updatePageCopy(lang) {
+      const copy = pageCopy[lang];
+      if (!copy) return;
+
+      pageTitle.textContent = copy.title;
+      pageSubtitle.textContent = copy.subtitle;
+      document.title = copy.documentTitle;
+      document.documentElement.lang = lang === 'en' ? 'en' : 'zh-Hant';
+    }
 
     function activateTab(tab, shouldFocus = true) {
       tabs.forEach((item) => {
@@ -252,6 +277,8 @@
       panels.forEach((panel) => {
         panel.hidden = panel.id !== tab.getAttribute('aria-controls');
       });
+
+      updatePageCopy(tab.dataset.tab);
 
       if (shouldFocus) {
         tab.focus();
@@ -286,6 +313,8 @@
         activateTab(tabs[nextIndex]);
       });
     });
+
+    activateTab(document.getElementById('tab-zh'), false);
   </script>
 </body>
 </html>
